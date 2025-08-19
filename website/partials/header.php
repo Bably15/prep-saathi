@@ -1,18 +1,15 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-include 'auth_check.php';
 include 'db.php';
-$role = $_SESSION['role'] ?? 'user';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="http://localhost/PDF-Project/Admin/style.css" />
     <style>
         * {
             box-sizing: border-box;
@@ -29,11 +26,7 @@ $role = $_SESSION['role'] ?? 'user';
             width: 220px;
             float: left;
             background: #2c3e50;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            /* ensures it reaches bottom */
-            left: 0;
+            min-height: 100vh;
             color: #fff;
             box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
         }
@@ -101,15 +94,6 @@ $role = $_SESSION['role'] ?? 'user';
 
         tr:hover {
             background: #fafafa;
-        }
-
-        img {
-            max-width: 60px;
-            max-height: 80px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            padding: 2px;
-            background: #fff;
         }
 
         input,
@@ -186,15 +170,46 @@ $role = $_SESSION['role'] ?? 'user';
             outline: none;
             border-color: #ccc;
         }
+
+        .category-section {
+            padding: 15px 50px;
+        }
+
+        .banner-section {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .banner-section img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
     </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="sidebar">
-        <h2>Admin Panel</h2>
-        <a href="#">💰 Revenue</a>
-        <a href="index.php" class="<?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">📂 PDFs</a>
-        <a href="banner.php" class="<?= basename($_SERVER['PHP_SELF']) == 'banner.php' ? 'active' : '' ?>">🖼 Banner</a>
-        <a href="logout.php" style="background:#e74c3c;">🚪 Logout</a>
-    </div>
-    <div class="main-content">
+    <header class="site-header">
+        <a style="text-decoration: none;" href="/">
+            <div class="logo">
+                <img src="images/logo.png" alt="PrepSaathi" class="logo-img">
+                <span class="logo-text">Prep <span class="highlight">Saathi.in</span></span>
+            </div>
+        </a>
+        <nav class="nav-menu">
+            <a href="index.html" class="active">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact Us</a>
+            <div class="dropdown">
+                <a href="#">My account ▼</a>
+                <div class="dropdown-content">
+                    <a href="login.php">Login</a>
+                    <a href="register.php">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>

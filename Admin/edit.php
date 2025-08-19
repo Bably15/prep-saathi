@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label>Title</label>
-                    <input type="text" name="title" value="<?= htmlspecialchars($ebook['title']); ?>" required>
+                    <input class="readonly-input" type="text" name="title" value="<?= htmlspecialchars($ebook['title']); ?>" readonly>
                 </div>
 
                 <div class="form-group">

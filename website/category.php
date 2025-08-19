@@ -1,43 +1,76 @@
 <?php
-include '../Admin/db.php'; // adjust path if needed
+include 'db.php';
+include 'partials/header.php';
 
-// Get category ID from URL
-$category_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+// Get category id from URL
+$categoryId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+// If invalid, redirect or show error
+if ($categoryId <= 0) {
+    echo "<p>Invalid category.</p>";
+    exit;
+}
 
 // Fetch category name
-$stmt = $conn->prepare("SELECT name FROM categories WHERE id = ?");
-$stmt->bind_param("i", $category_id);
-$stmt->execute();
-$stmt->bind_result($category_name);
-$stmt->fetch();
-$stmt->close();
+$catStmt = $conn->prepare("SELECT name FROM categories WHERE id = ?");
+$catStmt->bind_param("i", $categoryId);
+$catStmt->execute();
+$catResult = $catStmt->get_result();
+$category = $catResult->fetch_assoc();
 
-// Fetch all PDFs in this category
-$stmt = $conn->prepare("SELECT id, title, regular_price, offer_price, thumbnail, pdf FROM ebooks WHERE category_id = ?");
-$stmt->bind_param("i", $category_id);
+if (!$category) {
+    echo "<p>Category not found.</p>";
+    exit;
+}
+
+// Fetch ebooks only in this category
+$stmt = $conn->prepare("
+    SELECT e.id, e.title, e.regular_price, e.offer_price, e.thumbnail, e.pdf, c.name AS category
+    FROM ebooks e
+    LEFT JOIN categories c ON e.category_id = c.id
+    WHERE e.category_id = ?
+    ORDER BY e.id DESC
+");
+$stmt->bind_param("i", $categoryId);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-<title><?php echo htmlspecialchars($category_name); ?> PDFs</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
 
-<h1><?php echo htmlspecialchars($category_name); ?> PDFs</h1>
+<section class="category-section">
+    <h1>Ebooks - <?= htmlspecialchars($category['name']); ?></h1>
 
-<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
-<?php while($row = $result->fetch_assoc()): ?>
-    <div style="background:#fff; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:15px; text-align:center;">
-        <img src="<?php echo htmlspecialchars($row['thumbnail']); ?>" alt="<?php echo htmlspecialchars($row['title']); ?>" style="width:100%; height:auto; border-radius:6px;">
-        <h3><?php echo htmlspecialchars($row['title']); ?></h3>
-        <p><del>₹<?php echo $row['regular_price']; ?></del> <strong>₹<?php echo $row['offer_price']; ?></strong></p>
-        <a href="<?php echo htmlspecialchars($row['pdf']); ?>" target="_blank" style="display:inline-block; background:#28a745; color:#fff; padding:8px 12px; border-radius:4px; text-decoration:none;">View PDF</a>
-    </div>
-<?php endwhile; ?>
-</div>
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Original Price</th>
+                <th>Offered Price</th>
+                <th>Category</th>
+                <th>Preview</th>
+                <th>PDF</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row = $result->fetch_assoc()): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['title']); ?></td>
+                    <td>₹<?= htmlspecialchars($row['regular_price']); ?></td>
+                    <td>₹<?= htmlspecialchars($row['offer_price']); ?></td>
+                    <td><?= htmlspecialchars($row['category']); ?></td>
+                    <td>
+                        <?php if ($row['thumbnail']): ?>
+                            <img src="<?= htmlspecialchars($row['thumbnail']); ?>" width="80">
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ($row['pdf']): ?>
+                            <a href="<?= htmlspecialchars($row['pdf']); ?>" target="_blank"> Buy Now</a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</section>
 
-</body>
-</html>
+<?php include 'partials/footer.php'; ?>
