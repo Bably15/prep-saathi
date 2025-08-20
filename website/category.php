@@ -45,7 +45,7 @@ $result = $stmt->get_result();
                 <th>Description</th>
                 <th>Original Price</th>
                 <th>Offered Price</th>
-                <th>Category</th>
+                <!-- <th>Category</th> -->
                 <th>Preview</th>
                 <th>PDF</th>
             </tr>
@@ -56,7 +56,7 @@ $result = $stmt->get_result();
                     <td><?= htmlspecialchars($row['title']); ?></td>
                     <td>₹<?= htmlspecialchars($row['regular_price']); ?></td>
                     <td>₹<?= htmlspecialchars($row['offer_price']); ?></td>
-                    <td><?= htmlspecialchars($row['category']); ?></td>
+                    <!-- <td><?= htmlspecialchars($row['category']); ?></td> -->
                     <td>
                         <?php if ($row['thumbnail']): ?>
                             <img src="<?= htmlspecialchars($row['thumbnail']); ?>" width="80">

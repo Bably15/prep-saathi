@@ -32,7 +32,7 @@ $categories = CategoryModel::all($conn);
             <th>Description</th>
             <th>Original Price</th>
             <th>Offered Price</th>
-            <th>Category</th>
+            <!-- <th>Category</th> -->
             <th>Preview</th>
             <th>PDF</th>
             <th>Edit</th>
@@ -44,14 +44,14 @@ $categories = CategoryModel::all($conn);
                 <td><input type="text" name="title" required></td>
                 <td><input type="number" name="regular_price" required></td>
                 <td><input type="number" name="offer_price" required></td>
-                <td>
+                <!-- <td>
                     <select name="category_id" required>
                         <option value="">--Select--</option>
                         <?php foreach ($categories as $id => $name): ?>
                             <option value="<?= (int)$id ?>"><?= htmlspecialchars($name) ?></option>
                         <?php endforeach; ?>
                     </select>
-                </td>
+                </td> -->
                 <td>
                     <label class="upload-box">
                         <input type="file" name="thumbnail" accept="image/*" required onchange="previewImage(event)">
@@ -84,7 +84,7 @@ $categories = CategoryModel::all($conn);
                 <td><?= htmlspecialchars($row['title']); ?></td>
                 <td>₹<?= htmlspecialchars($row['regular_price']); ?></td>
                 <td>₹<?= htmlspecialchars($row['offer_price']); ?></td>
-                <td><?= htmlspecialchars($row['category']); ?></td>
+                <!-- <td><?= htmlspecialchars($row['category']); ?></td> -->
                 <td><?php if ($row['thumbnail']): ?><img src="<?= htmlspecialchars($row['thumbnail']); ?>"><?php endif; ?></td>
                 <td><?php if ($row['pdf']): ?><a href="<?= htmlspecialchars($row['pdf']); ?>" target="_blank">View</a><?php endif; ?></td>
                 <td><a href="edit.php?id=<?= (int)$row['id']; ?>">✏️ Edit</a></td>

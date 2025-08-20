@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="number" step="0.01" name="offer_price" value="<?= htmlspecialchars($ebook['offer_price']); ?>" required>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label>Category</label>
                     <select name="category_id" required>
                         <option value="">-- Select --</option>
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </option>
                         <?php endforeach; ?>
                     </select>
-                </div>
+                </div> -->
 
                 <div class="form-group">
                     <label>Thumbnail (optional)</label>
